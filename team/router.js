@@ -2,8 +2,8 @@ const express = require('express')
 const Team = require ('./model')
 const {Router} = express
 const router = new Router()
-router.get('/team',(request,response,next)=>
-{
+const Player = require('../player/model')
+router.get('/team',(request,response,next)=>{
     Team.findAll()
     .then(teams => response.send(teams))
     .catch(err => next(err))
@@ -16,35 +16,36 @@ router.post('/team',(request,response,next) =>{
     })
     .catch(err => next(err))
 })
-// router.put('/team/:id',(request,response,next) =>{
-//     Team.findByPk(request.params.id)
-//     .then(team => {
-//         if(team){
-//             return team.update(request.body)
-//             .then(team =>{response.json(team)})
-//         }
-//     })
-//     .catch(err =>next(err))
-// })
-   
-
-    // User.findByPk(someId)
-    // .then(user => {
-    //     if (user) {
-    //         return user.update(myNewData)
-    //             .then(user => {/*..*/})
-    //     }
-    // })
-    // .catch(err => {/*..*/})
-
-
-router.get('/team/:id',(request ,response,next) => {
-  
-    const teamId = request.params.id
-    const team = Team.findByPk(teamId)
-    .then(team => response.send(team))
+router.put('/team/:id',(request,response,next) =>{
+    Team.findByPk(request.params.id)
+    .then(team => {
+        if(team){
+            return team.update(request.body)
+            .then(team =>{response.json(team)})
+        }
+    })
     .catch(err =>next(err))
+})
+router.get('/team/:id',(request ,response,next) => {
+    Team.findByPk(request.params.id,{ include: [Player] })
+        .then(team => response.send(team))
+        .catch(err =>next(err))
 
+})
+router.delete('/team/:id',(request,response,next) => {
+    Team.destroy({
+        where: {
+          id: request.params.id,
+        }
+      })
+      .then(numDeleted => {
+        if (numDeleted) {
+            response.status(204).end();
+        } else {
+            response.status(404).end();
+        }
+      })
+      .catch(next);
 })
 
 module.exports = router

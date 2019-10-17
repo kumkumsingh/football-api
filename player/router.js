@@ -12,12 +12,12 @@ router.get('/player',(request,response,next) => {
 router.post('/player',(request,response,next) =>{
     Player.create(request.body)
     .then(data => response.json(data))
-    .catch(err =>next(err))
+    .catch(next)
 })
 router.get('/player/:id',(request,response,next) =>{
     Player.findByPk(request.params.id,{ include: [Team] })
     .then(player =>response.json(player))
-    .catch(err =>next(err))
+    .catch(next)
 
 })
 module.exports = router
