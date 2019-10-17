@@ -16,16 +16,16 @@ router.post('/team',(request,response,next) =>{
     })
     .catch(err => next(err))
 })
-router.put('/team/:id',(request,response,next) =>{
-    Team.findByPk(request.params.id)
-    .then(team => {
-        if(team){
-            return team.update(request.body)
-            .then(team =>{response.json(team)})
-        }
-    })
-    .catch(err =>next(err))
-})
+// router.put('/team/:id',(request,response,next) =>{
+//     Team.findByPk(request.params.id)
+//     .then(team => {
+//         if(team){
+//             return team.update(request.body)
+//             .then(team =>{response.json(team)})
+//         }
+//     })
+//     .catch(err =>next(err))
+// })
    
 
     // User.findByPk(someId)
